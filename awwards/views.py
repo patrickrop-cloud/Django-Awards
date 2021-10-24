@@ -11,3 +11,13 @@ from .models import  Myprofile,Myprojects
 from .serializer import MerchSerializer
 
 # Create your views here.
+def index(request):
+    projects = Project.objects.all()
+
+    if 'item_name' in request.GET:
+        item_name = request.GET['item_name']
+        projects = projects.filter(title_icontains=item_name)
+    else:
+        projects=Project.objects.all()
+
+    return render(request, 'index.html',{'projects':projects})

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'bootstrap4',
     'crispy_forms',
+    'rest_framework',
 
 ]
 
