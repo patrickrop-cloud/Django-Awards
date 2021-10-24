@@ -105,3 +105,16 @@ def new_project(request):
         form = ProjectForm()
 
     return render(request,'project.html',{"form":form})
+
+
+class MerchList(APIView):
+    def get(self, request, format=None):
+        all_merch = Myprojects.objects.all()
+        serializers = MerchSerializer(all_merch, many=True)
+        return Response(serializers.data)
+
+class MerchList(APIView):
+    def get(self, request, format=None):
+        all_merch = Myprofile.objects.all()
+        serializers = MerchSerializer(all_merch, many=True)
+        return Response(serializers.data)
