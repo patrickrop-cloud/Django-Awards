@@ -9,20 +9,21 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import  Myprofile,Myprojects
 from .serializer import MerchSerializer
-from django.contrib.auth.decorators import login_required
+
+
 
 
 # Create your views here.
 def index(request):
-    projects = Project.objects.all()
+    projects=Project.objects.all()
 
     if 'item_name' in request.GET:
-        item_name = request.GET['item_name']
-        projects = projects.filter(title_icontains=item_name)
+        item_name=request.GET['item_name']
+        projects=projects.filter(title__icontains=item_name)
     else:
         projects=Project.objects.all()
 
-    return render(request, 'index.html',{'projects':projects})
+    return render(request,'index.html',{'projects':projects})
 
 def registeruser(request):
     title = 'Register - awwards'
@@ -30,48 +31,49 @@ def registeruser(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Account Created Successfully!.  Check out our Email later :)')
-            return redirect('login')
+            messages.success(request, 'Account Created Successfully!. Check out our Email later :)')
 
-        else:
-            form = CreateUserForm
-        context = {
-                'title':title,
-                'form':form,
-        }
-        return render(request, 'registration/register.html', context)
+            return redirect('login')
+    else:
+        form = CreateUserForm
+    context = {
+            'title':title,
+            'form':form,
+                        }
+    return render(request, 'registration/register.html', context)
 
 def loginpage(request):
-    if request.user.is_authenticated:
-        return redirect('index')
-    else:
-        if request.method == 'POST':
-            username = request.POST.get('username')
-            password = request.POST.get('password')
+	if request.user.is_authenticated:
+		return redirect('index')
+	else:
+		if request.method == 'POST':
+			username = request.POST.get('username')
+			password =request.POST.get('password')
 
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('index')
+			user = authenticate(request, username=username, password=password)
 
-            else:
-                messages.info(request, 'Username or password incorrect')
+			if user is not None:
+				login(request, user)
+				return redirect('index')
+			else:
+				messages.info(request, 'Username or password is incorrect')
 
-            context = {}
-            return render(request, 'registration/login.html', context)
+		context = {}
+		return render(request, 'registration/login.html', context)
+
 
 
 def logoutuser(request):
+    
     return redirect(reverse('login'))
 
 def create_profile(request):
     current_user = request.user
-
-    if request.method =='POST':
-        form = ProfileForm(request.POST, request.FILES)
+    
+    if request.method=='POST':
+        form = ProfileForm(request.POST,request.FILES)
         if request.current_user.is_authenticated:
             form.instance.user = request.user
-
         if form.is_valid():
             profile = form.save(commit=False)
             profile.user = current_user
@@ -81,8 +83,7 @@ def create_profile(request):
     else:
         form=ProfileForm()
 
-        return render(request, 'create-profile.html', {"form":form})
-
+    return render(request,'create-profile.html',{"form":form})
 
 def profile(request):
     current_user = request.user
@@ -91,24 +92,20 @@ def profile(request):
 
     return render(request,'profile.html',{"projects":projects,"profile":profile})
 
-
-@login_required
 def new_project(request):
     current_user = request.user
-    profile = Profile.objects.get(user=current_user)
+    # profile =Profile.objects.get(user=current_user)
     if request.method =='POST':
         form = ProjectForm(request.POST,request.FILES)
         if form.is_valid():
             project = form.save(commit=False)
             project.username = current_user
-            project.avatar = profile.avatar
-
+            # project.avatar = profile.avatar
             project.save()
     else:
         form = ProjectForm()
 
-    return render(request,'project.html',{"profile":profile})
-
+    return render(request,'project.html',{"form":form})
 
 class MerchList(APIView):
     def get(self, request, format=None):

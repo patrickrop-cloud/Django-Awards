@@ -11,7 +11,7 @@ class Project(models.Model):
     screenshot2=models.ImageField(default='default\.png',upload_to='screenshots/',blank=True)
     screenshot3=models.ImageField(default='default\.png',upload_to='screenshots/',blank=True)
     link=models.CharField(max_length=100,blank=True)
-    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=False)
 
     def __str__(self):
         return self.title
