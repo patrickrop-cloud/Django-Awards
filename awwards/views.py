@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from awwards.models import Profile, Project
+from awwards.models import Profile,Project
+from django.shortcuts import render,redirect
 from .forms import CreateUserForm,ProfileForm,ProjectForm
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout as dj_login
@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import  Myprofile,Myprojects
 from .serializer import MerchSerializer
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 def index(request):
@@ -90,9 +92,10 @@ def profile(request):
     return render(request,'profile.html',{"projects":projects,"profile":profile})
 
 
+@login_required
 def new_project(request):
     current_user = request.user
-    profile =Profile.objects.get(user=current_user)
+    profile = Profile.objects.get(user=current_user)
     if request.method =='POST':
         form = ProjectForm(request.POST,request.FILES)
         if form.is_valid():
@@ -104,7 +107,7 @@ def new_project(request):
     else:
         form = ProjectForm()
 
-    return render(request,'project.html',{"form":form})
+    return render(request,'project.html',{"profile":profile})
 
 
 class MerchList(APIView):
