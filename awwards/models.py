@@ -24,7 +24,7 @@ class Project(models.Model):
 
 class Profile(models.Model):
     avatar = models.ImageField(upload_to='avatars/')
-    bio = TextField(max_length=500,null=True)
+    bio = TextField(max_length=250,null=True)
     user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True,blank=True)
     name =models.CharField(max_length=100)
     email = models.EmailField()
