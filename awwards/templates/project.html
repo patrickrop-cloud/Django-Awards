@@ -21,11 +21,8 @@
   <link rel="stylesheet" href="{% static 'css/edit-profile.css' %}">
 
 {% endblock %}
-
 </head>
-
 <body>
-
   <div class="panel panel-default">
     <div class="panel-body">
       <form action="{% url 'new_project'%}" method="post"  enctype="multipart/form-data">
@@ -39,10 +36,10 @@
       </form>
     </div>
   </div>
-
    {% block scripts %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  {% bootstrap_javascript %} {% endblock %}
+  {% bootstrap_javascript %} 
+  {% endblock %}
 
 </body>
 
